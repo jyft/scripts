@@ -4,15 +4,16 @@
 REMOTE_SERVER="dev-sc-1.dev.mimecast.lan"
 TARGET_SERVER="ec2-3-10-173-205.eu-west-2.compute.amazonaws.com"
 TARGET_USER="rocky"
-REMOTE_DIRS=("/usr/local/mimecast/gs-file-scan/cfg" "/usr/local/mimecast/gs-file-scan/cache")
+REMOTE_DIRS=("/usr/local/mimecast/gs-file-scan/cfg/gs-file-scan.json" "/usr/local/mimecast/grid.json" "/usr/local/mimecast/gs-file-scan/cfg/log4j2.xml" "/usr/local/mimecast/gs-file-scan/localproperties.json" "/usr/local/mimecast/gs-file-scan/cfg/server.json"  "/usr/local/mimecast/gs-file-scan/cache")
 SSH_KEY="content-poc-ssh-key.pem"
 
 # Get the current username
 CURRENT_USER=$(whoami)
 ZIP_FILE="/home/${CURRENT_USER}/service_fs.zip"
+ZIP_FILE_LOCAL="/Users/${CURRENT_USER}/service_fs.zip
 
 # Create the zip archive on the remote server, ignoring any file failures
-ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo zip -r ${ZIP_FILE} ${REMOTE_DIRS[@]} 2>/dev/null"
+ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo zip -r -q ${ZIP_FILE} ${REMOTE_DIRS[@]} 2>/dev/null"
 ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo chmod 777 ${ZIP_FILE}"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to create zip file on remote server."
@@ -23,7 +24,7 @@ echo "Succesfully created ${ZIP_FILE} on ${REMOTE_SERVER}"
 
 # Transfer the zip file to the local machine
 echo "Moving ${ZIP_FILE} to local machine"
-scp "${CURRENT_USER}@${REMOTE_SERVER}:${ZIP_FILE}" "${ZIP_FILE}"
+scp "${CURRENT_USER}@${REMOTE_SERVER}:${ZIP_FILE}" "${ZIP_FILE_LOCAL}"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to transfer zip file to local machine."
     exit 1
@@ -31,7 +32,7 @@ fi
 
 # Transfer the zip file to the target server
 echo "Moving ${ZIP_FILE} to AWS server"
-scp -i "${SSH_KEY}" "${CURRENT_USER}@${REMOTE_SERVER}:${ZIP_FILE}" "${TARGET_USER}@${TARGET_SERVER}:${ZIP_FILE}"
+scp -i "${SSH_KEY}" "${CURRENT_USER}@${REMOTE_SERVER}:${ZIP_FILE_LOCAL}" "${TARGET_USER}@${TARGET_SERVER}:${ZIP_FILE}"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to transfer zip file to AWS server."
     exit 1

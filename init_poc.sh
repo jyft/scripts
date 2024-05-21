@@ -12,7 +12,7 @@ CURRENT_USER=$(whoami)
 ZIP_FILE="/home/${CURRENT_USER}/service_fs.zip"
 
 # Create the zip archive on the remote server, ignoring any file failures
-ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo zip -r -q ${ZIP_FILE} ${REMOTE_DIRS[@]} 2>/dev/null"
+ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo zip -r ${ZIP_FILE} ${REMOTE_DIRS[@]} 2>/dev/null"
 ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo chmod 777 ${ZIP_FILE}"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to create zip file on remote server."

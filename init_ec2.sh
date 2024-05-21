@@ -34,7 +34,7 @@ sudo curl -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto
 check_command "Failed to add Corretto repository."
 
 # Install Amazon Corretto 11 (JDK 11)
-sudo dnf install -y java-11-amazon-corretto
+sudo dnf install -y java-11-amazon-corretto-devel
 check_command "Failed to install Amazon Corretto 11."
 
 # Verify installations

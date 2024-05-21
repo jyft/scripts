@@ -13,15 +13,27 @@ ZIP_FILE="/home/${CURRENT_USER}/service_fs.zip"
 
 # Create the zip archive on the remote server, ignoring any file failures
 ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo zip -r -q ${ZIP_FILE} ${REMOTE_DIRS[@]} 2>/dev/null"
+ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo chmod 777 ${ZIP_FILE}"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to create zip file on remote server."
     exit 1
 fi
 
+echo "Succesfully created ${ZIP_FILE} on ${REMOTE_SERVER}"
+
+# Transfer the zip file to the local machine
+echo "Moving ${ZIP_FILE} to local machine"
+scp "${CURRENT_USER}@${REMOTE_SERVER}:${ZIP_FILE}" "${ZIP_FILE}"
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to transfer zip file to local machine."
+    exit 1
+fi
+
 # Transfer the zip file to the target server
+echo "Moving ${ZIP_FILE} to AWS server"
 scp -i "${SSH_KEY}" "${CURRENT_USER}@${REMOTE_SERVER}:${ZIP_FILE}" "${TARGET_USER}@${TARGET_SERVER}:${ZIP_FILE}"
 if [ $? -ne 0 ]; then
-    echo "Error: Failed to transfer zip file to target server."
+    echo "Error: Failed to transfer zip file to AWS server."
     exit 1
 fi
 

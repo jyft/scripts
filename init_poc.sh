@@ -11,8 +11,8 @@ SSH_KEY="content-poc-ssh-key.pem"
 CURRENT_USER=$(whoami)
 ZIP_FILE="/home/${CURRENT_USER}/service_fs.zip"
 
-# Create the zip archive on the remote server
-ssh "${CURRENT_USER}@${REMOTE_SERVER}" "zip -r ${ZIP_FILE} ${REMOTE_DIRS[@]}"
+# Create the zip archive on the remote server, ignoring any file failures
+ssh "${CURRENT_USER}@${REMOTE_SERVER}" "sudo zip -r -q ${ZIP_FILE} ${REMOTE_DIRS[@]} 2>/dev/null"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to create zip file on remote server."
     exit 1

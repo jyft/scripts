@@ -62,6 +62,9 @@ if ! id -u "$USERNAME" > /dev/null 2>&1; then
     sudo useradd -m -g "$GROUPNAME" "$USERNAME"
     check_command "Failed to create user '$USERNAME'."
     echo "User '$USERNAME' created and added to group '$GROUPNAME'."
+
+    sudo usermod -a -G "$GROUPNAME" "rocky"
+    check_command "Failed to add user 'rocky' to group '$GROUPNAME'."
 else
     echo "User '$USERNAME' already exists."
     # Ensure the user is in the group

@@ -92,7 +92,7 @@ check_command "Failed to change ownership of '$DIRECTORY'."
 echo "Changed ownership of '$DIRECTORY' to user '$USERNAME' and group '$GROUPNAME'."
 
 # Grant full permissions to the user and group
-sudo chmod -R 770 "$DIRECTORY"
+sudo chmod -R 777 "$DIRECTORY"
 check_command "Failed to change permissions of '$DIRECTORY'."
 echo "Granted read, write, and execute permissions to user '$USERNAME' and group '$GROUPNAME' on '$DIRECTORY'."
 

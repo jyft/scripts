@@ -67,6 +67,10 @@ else
     # Ensure the user is in the group
     sudo usermod -a -G "$GROUPNAME" "$USERNAME"
     check_command "Failed to add user '$USERNAME' to group '$GROUPNAME'."
+
+    sudo usermod -a -G "$GROUPNAME" "rocky"
+    check_command "Failed to add user 'rocky' to group '$GROUPNAME'."
+    
     echo "User '$USERNAME' added to group '$GROUPNAME'."
 fi
 

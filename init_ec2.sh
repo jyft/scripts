@@ -25,6 +25,14 @@ check_command "Failed to install wget."
 sudo dnf install -y nano
 check_command "Failed to install nano."
 
+# Install zip if not already installed
+sudo dnf install -y zip
+check_command "Failed to install zip."
+
+# Install unzip if not already installed
+sudo dnf install -y unzip
+check_command "Failed to install unzip."
+
 # Import the Amazon Corretto public key
 sudo rpm --import https://yum.corretto.aws/corretto.key
 check_command "Failed to import Amazon Corretto public key."
